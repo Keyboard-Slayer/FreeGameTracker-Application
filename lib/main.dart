@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'api.dart';
 
-void main() async {
-  await get_games();
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -32,15 +29,18 @@ class MyApp extends StatelessWidget {
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
-      /*FutureBuilder(
-        future: get_games(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
-            Text("OK");
-          }
-        }
+    return new FutureBuilder(
+      future: get_games(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return snapshot.hasData ? ListView(
+          children: create_listing(snapshot.data),
+        ):
+        Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+          ),
         );
-       */
+      }
+    );
   }
 }
