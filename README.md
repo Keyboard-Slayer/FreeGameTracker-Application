@@ -1,6 +1,6 @@
 # free_game_tracker
 
-A Simple Free Game Tracker
+A Simple Free Game Tracker 
 
 ## Getting Started
 

@@ -10,18 +10,17 @@ class MyApp extends StatelessWidget {
       title: "Free Game Tracker",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark
+        brightness: Brightness.dark,
       ),
-      home: Scaffold(
-        body: Body(),
+
+      home: Scaffold (
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
-            "Free Game Tracker",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-          ),
-        )
-      )
+          title: const Text("Free Game Tracker",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300)),
+        ),
+        body: Body(),
+      ),
     );
   }
 }
@@ -30,17 +29,24 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder(
-      future: get_games(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return snapshot.hasData ? ListView(
-          children: create_listing(snapshot.data),
-        ):
-        Center(
-          child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-          ),
-        );
-      }
-    );
+        future: get_games(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                ),
+              );
+            case ConnectionState.done:
+              return ListView(
+                children: create_listing(snapshot.data)
+              );
+          }
+          return null;
+        });
   }
 }
+
